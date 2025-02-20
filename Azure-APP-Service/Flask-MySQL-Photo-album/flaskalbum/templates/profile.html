@@ -1,0 +1,70 @@
+{% extends "website_layout.html" %}
+{% block content %}
+<main id="main" data-aos="fade" data-aos-delay="1500">
+
+  <!-- ======= End Page Header ======= -->
+  <div class="page-header d-flex align-items-center">
+    <div class="container position-relative">
+      <div class="row d-flex justify-content-center">
+        <div class="col-lg-6 text-center">
+          <h2>My Profile</h2>
+        </div>
+      </div>
+    </div>
+  </div><!-- End Page Header -->
+
+  <!-- ======= profile Section ======= -->
+  <section id="contact" class="contact">
+    <div class="container">
+      <div class="row justify-content-center m-4">
+        <div class="col-md-5 border-right">
+            <div class="profile-info d-flex flex-column align-items-center text-center p-3 py-5">
+              <form method="POST" enctype="multipart/form-data" class="mb-8" action="{{ url_for('profile') }}">
+                {% if profile_photo==None %}
+                <img class="profile-img mb-3"  src="https://static.vecteezy.com/system/resources/previews/005/544/718/non_2x/profile-icon-design-free-vector.jpg" referrerPolicy="no-referrer">
+                {% else %}
+                <img class="profile-img mb-3"  src="{{ profile_photo }}" referrerPolicy="no-referrer">
+                {% endif %}
+                <input type="file" name="profile_photo" accept="image/*" onclick="show_details()" class="upload-btn mb-4">
+                <button type="submit" name="update_profile" class="btn btn-primary upload-btn" onclick="return confirm('It is recommended to use square photo.')">Update Profile Photo</button>
+              </form>
+                
+                <!-- <span class="font-weight-bold">{{ name }}</span><span class="font-weight-bold">{{ email }}</span> -->
+
+                <!-- Delete function -->
+                <form method="POST" action="{{ url_for('profile') }}">
+                  <button type="submit" name="delete_acc" class="btn btn-primary upload-btn" onclick="return confirm('This will delete all your information. Are you sure?')">Delete your account</button>
+                </form>
+              
+            </div>
+        </div>
+        <div class="col-md-5">
+          <form class="update_profile" method="POST" action="/profile">
+            <div class="form-group m-3">
+                <label for="name" class="form-label">Name</label>
+                <input type="text" class="input-fields form-control" value="{{ name }}" name="name" id="name">
+            </div>
+            <div class="form-group m-3">
+                <label for="username" class="form-label">Username</label>
+                
+                <input type="text" class="input-fields form-control" value="{{ username }}" name="username" id="username">
+                
+            </div>
+            <div class="form-group m-3">
+                <label for="email" class="form-label">Email</label>
+              <input type="email" class="input-fields form-control" value="{{ email }}" name="email" id="email">
+            </div>
+            <div class="text-center">
+              <button class="btn btn-primary upload-btn" type="submit" name="update_profile">Update Changes</button>
+            </div>
+            
+            
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </section><!-- End profile Section -->
+
+</main><!-- End #main -->
+{% endblock %}

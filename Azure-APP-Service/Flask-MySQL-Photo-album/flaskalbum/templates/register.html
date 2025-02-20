@@ -1,0 +1,67 @@
+{% extends "login_layout.html" %}
+{% block content %}
+<form method="POST" action="{{ url_for('register') }}">
+    <div class="form-floating mb-3 info">
+      <input type="text" class="input_field form-control" name="name" id="name" placeholder="username" required>
+      <label for="name">Name</label>
+    </div>
+    <div class="form-floating mb-3 info">
+      <input type="email" class="input_field form-control" name="email" id="email" placeholder="Password" required>
+      <label for="email">Email Address</label>
+    </div>
+    <div class="form-floating mb-3 info">
+      <input type="text" class="input_field form-control" name="username" id="username" placeholder="username" required>
+      <label for="username">Username</label>
+    </div>
+    <div class="form-floating mb-3 info">
+      <input type="password" class="input_field form-control" name="password" id="password" placeholder="Password" required>
+      <label for="password">Password</label>
+    </div>
+    <div class="form-floating mb-3 info">
+      <input type="password" class="input_field form-control" name="confirm_password" id="confirm_password" placeholder="Confirm Password" required>
+      <label for="confirm_password">Confirm Password</label>
+      <span id="password_error" style="color: red;"></span>
+    </div>
+    <br>
+
+    <div class="submit">
+        <button id="submit_button" type="submit">Create Account</button>
+    </div>
+    <div class="signup-link">
+        Already have an account? <a href="{{ url_for('login') }}">Login</a>
+     </div>
+</form>
+
+<script>
+  // Get password and confirm password elements
+  var password = document.getElementById("password");
+  var confirm_password = document.getElementById("confirm_password");
+  var password_error = document.getElementById("password_error");
+  var submit_button = document.getElementById("submit_button");
+
+  // Function to check if passwords match
+  function checkPasswords() {
+      if (confirm_password.value === password.value) {
+          password_error.textContent = "";
+          submit_button.disabled = false; // Enable submit button if passwords match
+      } else {
+          password_error.textContent = "Passwords do not match.";
+          submit_button.disabled = true; // Disable submit button if passwords do not match
+      }
+  }
+
+  // Event listener for input in confirm password field
+  confirm_password.addEventListener("input", function() {
+      checkPasswords();
+      
+  });
+
+  // Event listener for input in password field
+  password.addEventListener("input", function() {
+      checkPasswords();
+  });
+</script>
+
+{% endblock %}
+
+

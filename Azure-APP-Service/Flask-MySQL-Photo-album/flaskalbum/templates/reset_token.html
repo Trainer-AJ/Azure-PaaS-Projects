@@ -1,0 +1,47 @@
+{% extends "login_layout.html" %}
+{% block content %}
+<form method="POST" action="">
+    <div class="form-floating mb-3 info">
+      <input type="password" class="input_field form-control" name="password" id="password" placeholder="Password" required>
+      <label for="password">New Password</label>
+    </div>
+    <div class="form-floating info">
+      <input type="password" class="input_field form-control" name="confirm_password" id="confirm_password" placeholder="Confirm Password" required>
+      <label for="confirm_password">Confirm Password</label>
+      <span id="password_error" style="color: red;"></span>
+    </div>
+    <div class="submit">
+        <button id="submit_button" type="submit">Reset Password</button>
+    </div>
+</form>
+
+<script>
+    // Get password and confirm password elements
+    var password = document.getElementById("password");
+    var confirm_password = document.getElementById("confirm_password");
+    var password_error = document.getElementById("password_error");
+    var submit_button = document.getElementById("submit_button");
+  
+    // Function to check if passwords match
+    function checkPasswords() {
+        if (confirm_password.value === password.value) {
+            password_error.textContent = "";
+            submit_button.disabled = false; // Enable submit button if passwords match
+        } else {
+            password_error.textContent = "Passwords do not match.";
+            submit_button.disabled = true; // Disable submit button if passwords do not match
+        }
+    }
+  
+    // Event listener for input in confirm password field
+    confirm_password.addEventListener("input", function() {
+        checkPasswords();
+        
+    });
+  
+    // Event listener for input in password field
+    password.addEventListener("input", function() {
+        checkPasswords();
+    });
+</script>
+{% endblock content %}

@@ -1,0 +1,171 @@
+{% extends "website_layout.html" %}
+{% block content %}
+
+<!-- ======= Hero Section ======= -->
+<section id="hero" class="hero d-flex flex-column justify-content-center align-items-center" data-aos="fade" data-aos-delay="1500">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-6 text-center">
+        <h2>Welcome, <span>{{ name }}</span></h2>
+        <p>This is your own Photo Album. Upload now!</p>
+        <form action="{{ url_for('upload_photo') }}" method="POST" enctype="multipart/form-data" class="mb-8">
+            <div class="space-y-4">
+                <input type="file" name="photo" accept="image/*" onclick="show_details()" class="upload-btn mb-4">
+                <div id="photo_details" style="display: none;">
+                    <div class="row">
+                      <div class="col-md-6 mb-3">
+                        <input type="text" name="title" placeholder="Photo Title" class="input-fields form-control">
+                      </div>
+                      <div class="col-md-6 mb-3">
+                        <input type="text" name="location" placeholder="Location" class="input-fields form-control">
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-6 mb-3">
+                        <textarea name="description" placeholder="Description" class="input-fields form-control"></textarea>
+                      </div>
+                      <div class="col-md-6 mb-3">
+                        <input type="text" name="tags" placeholder="Tags (comma separated)" class="input-fields form-control">
+                      </div>
+                    </div>
+                    <button type="submit" class="upload-btn btn btn-primary">Upload Photo</button>
+                </div>
+            </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section><!-- End Hero Section -->
+
+<main id="main" role="main" aos="fade" aos-delay="1500">
+  {% if photos %}
+  <div id="gallery" class="section gallery">
+      <div class="container-fluid">
+          <div class="row gy-4 justify-content-center">
+              {% for photo in photos %}
+              <div class="col-xl-3 col-lg-4 col-md-6">
+                  <div class="gallery-item h-100">
+                      <img src="{{ photo.url }}" class="img-fluid" alt="{{ photo.title }}">
+                      
+                      <div class="gallery-links d-flex align-items-center justify-content-center">
+                          <a href="{{ photo.url }}" 
+                             class="glightbox preview-link"
+                             data-gallery="gallery1"
+                             data-glightbox="description: .custom-desc-{{ loop.index }}">
+                              <i class="bi bi-arrows-angle-expand"></i>
+                          </a>
+                          <button type="button" class="action-btn" data-bs-toggle="modal" data-bs-target="#editModal{{ photo.id }}">
+                            <i class="bi bi-pencil"></i>
+                          </button>
+                          <form action="{{ url_for('delete_photo', photo_id=photo.id) }}" method="POST" class="inline">
+                            <button type="submit" class="text-red-500 action-btn" onclick="return confirm('Are you sure?')">
+                              <i class="bi bi-trash"></i>
+                            </button>
+                          </form>
+                          
+                          <div class="glightbox-desc custom-desc-{{ loop.index }}" style="display: none;">
+                              <div class="custom-desc">
+                                  <h3 class="text-xl font-bold mb-3">{{ photo.title }}</h3>
+                                  {% if photo.description %}
+                                      <p>📝 {{ photo.description }}</p>
+                                  {% endif %}
+                                  {% if photo.location %}
+                                      <p>📍 {{ photo.location }}</p>
+                                  {% endif %}
+                                  {% if photo.tags %}
+                                      <p>🏷️ {{ photo.tags }}</p>
+                                  {% endif %}
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+
+              <!-- Edit Modal -->
+              <div class="modal fade" id="editModal{{ photo.id }}" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog">
+                  <div class="modal-content" style="background-color: var(--color-secondary); color: var(--color-default);">
+                    <div class="modal-header">
+                      <h2>Edit Photo Details</h2>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" 
+                              style="background-color: var(--color-primary);"></button>
+                    </div>
+
+                    <form action="{{ url_for('edit_photo', photo_id=photo.id) }}" method="POST" class="update_profile">
+                      <div class="modal-body">
+                        <!-- Title Field -->
+                        <div class="form-group m-3">
+                          <label for="title" class="form-label">Title</label>
+                          <input type="text" 
+                                 class="input-fields form-control" 
+                                 name="title" 
+                                 value="{{ photo.title }}" 
+                                 required>
+                        </div>
+                      
+                        <!-- Description Field --> 
+                        <div class="form-group m-3">
+                          <label for="description" class="form-label">Description</label>
+                          <textarea class="input-fields form-control" 
+                                    name="description" 
+                                    style="min-height: 100px;">{{ photo.description }}</textarea>
+                        </div>
+                      
+                        <!-- Location Field -->
+                        <div class="form-group m-3">
+                          <label for="location" class="form-label">Location</label>
+                          <input type="text" 
+                                 class="input-fields form-control" 
+                                 name="location" 
+                                 value="{{ photo.location }}">
+                        </div>
+                      
+                        <!-- Tags Field -->
+                        <div class="form-group m-3">
+                          <label for="tags" class="form-label">Tags</label>
+                          <input type="text" 
+                                 class="input-fields form-control" 
+                                 name="tags" 
+                                 value="{{ photo.tags }}">
+                        </div>
+                      </div>
+                    
+                      <div class="modal-footer" style="border-top: 1px solid var(--color-primary);">
+                        <button type="button" 
+                                class="btn btn-secondary" 
+                                data-bs-dismiss="modal"
+                                style="background-color: var(--color-secondary); color: var(--color-default)">
+                          Close
+                        </button>
+                        <button type="submit" 
+                                class="btn btn-primary upload-btn">
+                          Save changes
+                        </button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+              {% endfor %}
+          </div>
+      </div>
+  </div>
+  {% else %}
+  <div class="container">
+      <div class="row justify-content-center">
+          <div class="col-lg-6 text-center">
+              <h2>No photos uploaded yet.</h2>
+          </div>
+      </div>
+  </div>
+  {% endif %}
+</main>
+<script>
+    function show_details() {
+            // Get the input fields container
+            const detailsContainer = document.getElementById('photo_details');
+            // Show the container when a file is selected
+            detailsContainer.style.display = 'block';
+        }
+</script>
+{% endblock %}

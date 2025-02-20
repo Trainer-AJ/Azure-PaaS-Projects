@@ -1,0 +1,22 @@
+[
+    {
+      "name": "MYSQL_HOST",
+      "slotSetting": true,
+      "value": "XXXXX5.mysql.database.azure.com"
+    },
+    {
+        "name": "MYSQL_USER",
+        "slotSetting": true,
+        "value": "aj"
+    },
+    {
+        "name": "MYSQL_PASSWORD",
+        "slotSetting": true,
+        "value": "nXXXXXX2"
+    },
+    {
+        "name": "MYSQL_DB",
+        "slotSetting": true,
+        "value": "feb19"
+    }
+  ]

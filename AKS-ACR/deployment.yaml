@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: aj-deployment
+  name: aj-deployment
+  namespace: aj
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: aj-deployment
+  template:
+    metadata:
+      labels:
+        app: aj-deployment
+    spec:
+      containers:
+      - image: acr
+        name: aj
+        ports:
+        - containerPort: 80
+          protocol: TCP
+      # dnsPolicy: ClusterFirst
+
